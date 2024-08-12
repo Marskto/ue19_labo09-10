@@ -10,10 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name:   
- Build the Docker image
-        run: docker build . --file Dockerfile   
- -t my-image:$GITHUB_SHA
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile -t my-image:$GITHUB_SHA
       - name: Login to GitHub Container Registry
         run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Push the Docker image
