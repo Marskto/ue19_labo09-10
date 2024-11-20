@@ -27,19 +27,19 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        push: false # Build the image locally but don't push yet
-        tags: ghcr.io/marskto/ue19_labo09-10:latest
+        push: false # Construire localement sans push
+        tags: ghcr.io/marskto/ue19_labo09-10:latest # Assurez-vous que ce tag correspond
 
     # 4. Scan the Docker image for vulnerabilities with Trivy
     - name: Scan Docker Image for Vulnerabilities
       uses: aquasecurity/trivy-action@master
       with:
-        image: ghcr.io/marskto/ue19_labo09-10:latest
-        format: table          # Human-readable output
-        severity: HIGH,CRITICAL # Scan for HIGH and CRITICAL vulnerabilities only
-        ignore-unfixed: true   # Ignore vulnerabilities that have no available fix
-        vuln-type: os,library  # Scan for OS and library vulnerabilities
-        exit-code: 1           # Fail the build if vulnerabilities are found
+        image: ghcr.io/marskto/ue19_labo09-10:latest # Remplacez par le tag correct
+        format: table
+        severity: HIGH,CRITICAL
+        ignore-unfixed: true
+        vuln-type: os,library
+        exit-code: 1
 
     # 5. Push the Docker image (only if the scan is successful)
     - name: Push Docker Image
