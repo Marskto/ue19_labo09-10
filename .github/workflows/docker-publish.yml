@@ -1,4 +1,4 @@
-name: Build, Scan and Publish Docker Image
+name: Build, Scan, and Publish Docker Image
 
 on:
   push:
@@ -27,21 +27,23 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        push: false # We build the image but do not push it yet
+        push: false # Build the image locally but don't push yet
         tags: ghcr.io/marskto/ue19_labo09-10:latest
 
-    # 4. Scan the Docker image for vulnerabilities
+    # 4. Scan the Docker image for vulnerabilities with Trivy
     - name: Scan Docker Image for Vulnerabilities
-      uses: aquasecurity/trivy-action@v0.11.1
+      uses: aquasecurity/trivy-action@master
       with:
-        image-ref: ghcr.io/marskto/ue19_labo09-10:latest
-        format: table # You can also use `sarif` for GitHub Code Scanning support
-        exit-code: 1  # Fails the build if vulnerabilities are found
-        severity: HIGH,CRITICAL # Only detect HIGH and CRITICAL vulnerabilities
+        image: ghcr.io/marskto/ue19_labo09-10:latest
+        format: table          # Human-readable output
+        severity: HIGH,CRITICAL # Scan for HIGH and CRITICAL vulnerabilities only
+        ignore-unfixed: true   # Ignore vulnerabilities that have no available fix
+        vuln-type: os,library  # Scan for OS and library vulnerabilities
+        exit-code: 1           # Fail the build if vulnerabilities are found
 
-    # 5. Push the Docker image if scan passes
+    # 5. Push the Docker image (only if the scan is successful)
     - name: Push Docker Image
-      if: success() # Ensures the image is pushed only if the scan is successful
+      if: success() # Ensure this step runs only if the scan is successful
       uses: docker/build-push-action@v4
       with:
         context: .
