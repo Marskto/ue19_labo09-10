@@ -34,7 +34,7 @@ jobs:
     - name: Scan Docker Image for Vulnerabilities
       uses: aquasecurity/trivy-action@master
       with:
-        image: ghcr.io/marskto/ue19_labo09-10:latest # Remplacez par le tag correct
+        image-ref: ghcr.io/marskto/ue19_labo09-10:latest
         format: table
         severity: HIGH,CRITICAL
         ignore-unfixed: true
